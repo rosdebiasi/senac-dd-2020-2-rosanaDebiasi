@@ -6,8 +6,6 @@ public class PesquisadorDAO {
 	
 	public Pesquisador cadastrar(Pesquisador novoPesquisador) {
 		
-		// método
-		
 		return novoPesquisador;
 	}
 	
