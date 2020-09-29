@@ -1,8 +1,6 @@
 package br.sc.senac.model.bo;
 
-import br.sc.senac.model.dao.PublicoGeralDAO;
 import br.sc.senac.model.dao.VacinaDAO;
-import br.sc.senac.model.exception.CpfJaCadastradoException;
 import br.sc.senac.model.vo.Vacina;
 
 

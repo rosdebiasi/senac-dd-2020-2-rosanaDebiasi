@@ -4,6 +4,7 @@ package br.sc.senac.controller;
 import br.sc.senac.model.bo.PublicoGeralBO;
 import br.sc.senac.model.exception.CpfInvalidoException;
 import br.sc.senac.model.exception.CpfJaCadastradoException;
+import br.sc.senac.model.exception.NomeInvalidoException;
 import br.sc.senac.model.vo.PublicoGeral;
 
 public class PublicoGeralController {
@@ -15,12 +16,14 @@ public class PublicoGeralController {
 		
 		try {
 			this.validarCPF(novoPublicoGeral.getCpf());
+			this.validarNome(novoPublicoGeral.getNome());
 			novoPublicoGeral = publicoGeralBO.salvar(novoPublicoGeral);
-		} catch (CpfInvalidoException 
+		} catch (CpfInvalidoException
+				| NomeInvalidoException
 				| CpfJaCadastradoException excecao) {
 			mensagem = excecao.getMessage();
 		} 
-		mensagem = "Públuco geral salvo com sucesso! Id gerado: " + novoPublicoGeral.getId();
+		mensagem = "Público geral salvo com sucesso! Id gerado: " + novoPublicoGeral.getId();
 		
 		return mensagem;
 	}
@@ -31,8 +34,10 @@ public class PublicoGeralController {
 		
 		try {
 			this.validarCPF(publicoGeral.getCpf());
+			this.validarNome(publicoGeral.getNome());
 			atualizou = publicoGeralBO.atualizar(publicoGeral);
-		} catch (CpfInvalidoException 
+		} catch (CpfInvalidoException
+				| NomeInvalidoException
 				| CpfJaCadastradoException excecao) {
 			mensagem = excecao.getMessage();
 		} 
@@ -57,6 +62,14 @@ public class PublicoGeralController {
 		} catch (NumberFormatException ex) {
 			throw new CpfInvalidoException("CPF deve possuir tamanho 11 e somente números");
 		}
+	}
+	
+	private void validarNome(String nome) throws NomeInvalidoException {
+		
+		if(nome == null || nome.isEmpty()
+				|| nome.length() >= 3) {
+			throw new NomeInvalidoException("Nome deve ter no mínimo 3 caracteres.");
+		}	
 	}
 
 }
