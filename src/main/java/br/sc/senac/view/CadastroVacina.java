@@ -16,6 +16,10 @@ import javax.swing.JButton;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
+import br.sc.senac.controller.VacinaController;
+import br.sc.senac.model.vo.Pesquisador;
+import br.sc.senac.model.vo.Vacina;
+
 public class CadastroVacina extends JFrame {
 
 	private JPanel contentPane;
@@ -97,11 +101,6 @@ public class CadastroVacina extends JFrame {
 		comboBoxPesquisadorResponsavel.setBounds(165, 160, 238, 22);
 		contentPane.add(comboBoxPesquisadorResponsavel);
 		
-		JButton btnSalvar = new JButton("Salvar");
-		btnSalvar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnSalvar.setBounds(87, 216, 89, 23);
-		contentPane.add(btnSalvar);
-		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnCancelar.setBounds(245, 216, 89, 23);
@@ -112,7 +111,37 @@ public class CadastroVacina extends JFrame {
 		final DatePicker dataInicioPesquisa = new DatePicker(dateSettings);
 		dataInicioPesquisa.setBounds(165, 124, 238, 20);
 		contentPane.add(dataInicioPesquisa);
+		
+		JButton btnSalvar = new JButton("Salvar");
+		/* fiz isso porque desaparecia o layout da tela
+		btnSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				//Preencher um objeto VACINA com os dados da tela
+				Vacina novaVacina = new Vacina();
+				Pesquisador pesquisador = new Pesquisador();
+				novaVacina.setPaisOrigem(paisOrigem);
+				novaVacina.setDataInicioPesquisa(dataInicioPesquisa.getDate()); // não sei se está correto
+				novaVacina.setEstagioPesquisa(lblEstgioDaPesquisa.getComponents(rdbtnInicial|rdbtnTestes|rdbtnAplicacaoEmMassa)); // não sei se está correto para pegar estágio da pesquisa
+				pesquisador.getNome(comboBoxPesquisadorResponsavel.getComponent(n))
 
+				//Instanciar um controller adequado
+				VacinaController vacinaController = new VacinaController(); 
+				VacinaController vacinaController = new VacinaController(); 
+				
+				//Chamar o método SALVAR no controller e pegar a mensagem retornada
+				String mensagem = vacinaController.salvar(novaVacina);
+				
+				//Mostra a mensagem devolvida pelo controller
+				JOptionPane.showMessageDialog(contentPane, mensagem);
+			}
+		});
+		*/
+		
+		btnSalvar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnSalvar.setBounds(87, 216, 89, 23);
+		contentPane.add(btnSalvar);
+		
 	}
 	
 }

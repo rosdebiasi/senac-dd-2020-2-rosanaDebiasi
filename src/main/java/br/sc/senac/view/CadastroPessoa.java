@@ -10,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 import javax.swing.JTextField;
@@ -21,6 +23,9 @@ import javax.swing.JFormattedTextField;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
+
+import br.sc.senac.controller.PesquisadorController;
+import br.sc.senac.model.vo.Pesquisador;
 
 public class CadastroPessoa extends JFrame {
 
@@ -109,13 +114,13 @@ public class CadastroPessoa extends JFrame {
 		lblCategoria.setBounds(28, 211, 60, 14);
 		contentPane.add(lblCategoria);
 		
-		JRadioButton rdbtnPblicoGeral = new JRadioButton("P\u00FAblico geral");
+		JRadioButton rdbtnPblicoGeral = new JRadioButton("Público geral");
 		rdbtnPblicoGeral.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GrupoCategoria.add(rdbtnPblicoGeral);
 		rdbtnPblicoGeral.setBounds(96, 207, 89, 23);
 		contentPane.add(rdbtnPblicoGeral);
 		
-		JRadioButton rdbtnVoluntrio = new JRadioButton("Volunt\u00E1rio");
+		JRadioButton rdbtnVoluntrio = new JRadioButton("Voluntário");
 		rdbtnVoluntrio.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GrupoCategoria.add(rdbtnVoluntrio);
 		rdbtnVoluntrio.setBounds(207, 207, 77, 23);
@@ -127,7 +132,7 @@ public class CadastroPessoa extends JFrame {
 		rdbtnPesquisador.setBounds(316, 207, 89, 23);
 		contentPane.add(rdbtnPesquisador);
 		
-		JLabel lblInstituicao = new JLabel("Institui\u00E7\u00E3o:");
+		JLabel lblInstituicao = new JLabel("Instituição:");
 		lblInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblInstituicao.setEnabled(false);
 		lblInstituicao.setBounds(28, 249, 77, 14);
@@ -138,12 +143,7 @@ public class CadastroPessoa extends JFrame {
 		comboBoxIntituicao.setEnabled(false);
 		comboBoxIntituicao.setBounds(154, 245, 251, 22);
 		contentPane.add(comboBoxIntituicao);
-		
-		JButton btnSalvar = new JButton("Salvar");
-		btnSalvar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnSalvar.setBounds(84, 293, 89, 23);
-		contentPane.add(btnSalvar);
-		
+				
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnCancelar.setBounds(260, 293, 89, 23);
@@ -160,6 +160,8 @@ public class CadastroPessoa extends JFrame {
 			formattedTextFieldTelefone = new JFormattedTextField(mascaraTelefone);
 			formattedTextFieldTelefone.setBounds(154, 170, 251, 20);
 			contentPane.add(formattedTextFieldTelefone);
+			contentPane.add(lblSexo);
+			contentPane.add(comboBoxIntituicao);
 				
 			DatePickerSettings dateSettings = new DatePickerSettings();
 			dateSettings.setAllowKeyboardEditing(false);
@@ -171,6 +173,33 @@ public class CadastroPessoa extends JFrame {
 			JOptionPane.showMessageDialog(null, "Ocorreu um erro no sistema, entre em contato com o administrador.");
 			System.out.println("Causa da exceção: " + e.getMessage());
 		}
+		
+		JButton btnSalvar = new JButton("Salvar");
+		btnSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				//Preencher um objeto PESQUISADOR com os dados da tela
+				Pesquisador novoPesquisador = new Pesquisador();
+				novoPesquisador.setNome(txtNome.getText());
+				novoPesquisador.setCpf(formattedTextFieldCpf.getText());
+				novoPesquisador.setDataNascimento(); // dúvida pegar a data de nascimento
+				novoPesquisador.setSexo(lblSexo.getText()); // dúvida pegar sexo
+				novoPesquisador.setInstituicao(comboBoxIntituicao.setEnabled(true).getText()); // dúvida pegar instituicao
+							
+				//Instanciar um controller adequado
+				PesquisadorController pesquisadorController = new PesquisadorController(); 
+				
+				//Chamar o método SALVAR no controller e pegar a mensagem retornada
+				String mensagem = pesquisadorController.salvar(novoPesquisador);
+				
+				//Mostra a mensagem devolvida pelo controller
+				JOptionPane.showMessageDialog(contentPane, mensagem);
+			}
+		});
+		
+		btnSalvar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnSalvar.setBounds(84, 293, 89, 23);
+		contentPane.add(btnSalvar);
 		
 	}
 }

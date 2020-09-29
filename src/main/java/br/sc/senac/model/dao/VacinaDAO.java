@@ -163,7 +163,4 @@ public boolean alterar(Vacina vacina) {
 		return  vacinaBuscada;
 	}
 	
-	
-	
-
 }
