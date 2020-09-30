@@ -31,7 +31,9 @@ public class VacinaDAO {
 			Voluntario voluntario = verificarIdVoluntario(voluntario); // como setar para ser um dos dois? 
 			
 			query.setInt(1, pesquisador.getId());
+			
 			query.setInt(2, publicoGeral.getId() || voluntario.getId() ); // como setar para ser um dos dois? 
+			
 			query.setString(3, novaVacina.getPaisOrigem());
 			query.setString(4, String.valueOf(novaVacina.getEstagioPesquisa()));
 			query.setString(5, String.valueOf(novaVacina.getDataInicioPesquisa())); 
@@ -47,7 +49,7 @@ public class VacinaDAO {
 public boolean alterar(Vacina vacina) {
 		
 		String sql = " UPDATE VACINA " 
-					+ " SET PAIS_ORIGEM=?, ESTAGIO_PESQUISA=?, DATA_INICIO_PESQUISA=? " 
+					+ " SET PAIS_ORIGEM=?, ESTAGIO_PESQUISA=?, DATA_INICIO_PESQUISA=?, IDPESQUISADOR=? " 
 					+ " WHERE IDVACINA=?";
 
 		boolean alterou = false;
@@ -55,10 +57,13 @@ public boolean alterar(Vacina vacina) {
 		try(Connection conexao = Banco.getConnection();
 			PreparedStatement query = Banco.getPreparedStatement(conexao, sql);){
 			
+			Pesquisador pesquisador = new Pesquisador();
+			
 			query.setString(1,vacina.getPaisOrigem());
 			query.setString(2, String.valueOf(vacina.getEstagioPesquisa()));
 			query.setString(3, String.valueOf(vacina.getDataInicioPesquisa()));
 			query.setInt(4, vacina.getIdVacina());
+			query.setInt(5, pesquisador.getId());
 			int codigoRetorno = query.executeUpdate();
 			alterou = (codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO);
 		} catch (SQLException e) {

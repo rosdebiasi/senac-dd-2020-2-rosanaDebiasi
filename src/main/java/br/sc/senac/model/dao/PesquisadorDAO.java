@@ -16,7 +16,7 @@ public class PesquisadorDAO {
 		
 		String sql = "INSERT INTO PESSOA (NOME, CPF, DATA_NASCIMENTO, SEXO, REACAO_VACINA, TELEFONE)" + 
 						"VALUES(?,?,?,?,?,?)" + 
-						"INSERT INTO PESQUISADOR (INSTITUICAO)" + "VALUES(?)";
+						"INSERT INTO PESQUISADOR (INSTITUICAO, IDPESSOA)" + "VALUES(?,?)";
 		
 		PreparedStatement query = Banco.getPreparedStatementWithGeneratedKeys(conexao, sql);
 		
@@ -28,6 +28,7 @@ public class PesquisadorDAO {
 			query.setInt(5, novoPesquisador.getReacaoVacina());
 			query.setString(6, novoPesquisador.getTelefone());
 			query.setString(1, novoPesquisador.getInstituicao());
+			query.setInt(2, novoPesquisador.getId());
 		} catch(SQLException e) {
 			System.out.println("Erro ao inserir o pesquisador.\nCausa: " + e.getMessage());
 		} finally {
@@ -152,7 +153,7 @@ public boolean alterar(Pesquisador pesquisador) {
 		String sql = "SELECT count(idpessoa) FROM PESSOA WHERE CPF = ?";
 		
 		if(umPesquisador.getId() > 0) {
-			sql += " AND ID <> ? ";
+			sql += " AND IDPESSOA <> ? ";
 		}
 		PreparedStatement consulta = Banco.getPreparedStatement(conexao, sql);
 		

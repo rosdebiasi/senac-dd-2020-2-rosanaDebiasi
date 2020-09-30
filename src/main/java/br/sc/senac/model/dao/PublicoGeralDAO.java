@@ -15,7 +15,8 @@ public class PublicoGeralDAO {
 		Connection conexao = Banco.getConnection();
 		
 		String sql = "INSERT INTO PESSOA (NOME, CPF, DATA_NASCIMENTO, SEXO, REACAO_VACINA, TELEFONE)" + 
-						"VALUES(?,?,?,?,?,?)"; 
+						"VALUES(?,?,?,?,?,?)" + 
+						"INSERT INTO PUBLICO_GERAL(IDPESSOA)" + "VALUES(?)"; 
 	
 		PreparedStatement query = Banco.getPreparedStatementWithGeneratedKeys(conexao, sql);
 		
@@ -26,6 +27,7 @@ public class PublicoGeralDAO {
 			query.setString(4, String.valueOf(novoPublicoGeral.getSexo())); 
 			query.setInt(5, novoPublicoGeral.getReacaoVacina());
 			query.setString(6, novoPublicoGeral.getTelefone());
+			query.setInt(1, novoPublicoGeral.getId());
 		} catch(SQLException e) {
 			System.out.println("Erro ao inserir público geral.\nCausa: " + e.getMessage());
 		} finally {
