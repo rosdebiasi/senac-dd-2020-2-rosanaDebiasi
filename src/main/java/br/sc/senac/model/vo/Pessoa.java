@@ -12,11 +12,13 @@ public abstract class Pessoa {
 	private char sexo;
 	private String telefone;
 	private int reacaoVacina;
+	private String instituicao;
+	private int tipo;
 	
 	private List <Vacina> vacinas;
-	
+
 	public Pessoa(int id, String nome, String cpf, LocalDate dataNascimento, char sexo, String telefone,
-			int reacaoVacina, List<Vacina> vacinas) {
+			int reacaoVacina, String instituicao, int tipo, List<Vacina> vacinas) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -25,13 +27,15 @@ public abstract class Pessoa {
 		this.sexo = sexo;
 		this.telefone = telefone;
 		this.reacaoVacina = reacaoVacina;
+		this.instituicao = instituicao;
+		this.tipo = tipo;
 		this.vacinas = vacinas;
 	}
 
 	public Pessoa() {
 		super();
 	}
-
+	
 	public int getId() {
 		return id;
 	}
@@ -95,6 +99,22 @@ public abstract class Pessoa {
 
 	public void setReacaoVacina(int reacaoVacina) {
 		this.reacaoVacina = reacaoVacina;
+	}
+	
+	public String getInstituicao() {
+		return instituicao;
+	}
+
+	public void setInstituicao(String instituicao) {
+		this.instituicao = instituicao;
+	}
+
+	public int getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
 	}
 
 	@Override

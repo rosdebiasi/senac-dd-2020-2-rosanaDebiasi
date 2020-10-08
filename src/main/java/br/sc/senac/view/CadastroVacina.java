@@ -2,7 +2,6 @@ package br.sc.senac.view;
 
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -48,6 +47,7 @@ public class CadastroVacina extends JFrame {
 		setTitle("Cadastro de vacina");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -141,6 +141,7 @@ public class CadastroVacina extends JFrame {
 		btnSalvar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnSalvar.setBounds(87, 216, 89, 23);
 		contentPane.add(btnSalvar);
+		
 		
 	}
 	

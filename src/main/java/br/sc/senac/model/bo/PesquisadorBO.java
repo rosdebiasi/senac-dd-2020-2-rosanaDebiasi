@@ -1,12 +1,12 @@
 package br.sc.senac.model.bo;
 
-import br.sc.senac.model.dao.PesquisadorDAO;
+import br.sc.senac.model.dao.PessoaDAO;
 import br.sc.senac.model.exception.CpfJaCadastradoException;
 import br.sc.senac.model.vo.Pesquisador;
 
 public class PesquisadorBO {
 	
-	private PesquisadorDAO pesquisadorDAO = new PesquisadorDAO();
+	private PessoaDAO pesquisadorDAO = new PessoaDAO();
 	
 	public Pesquisador salvar(Pesquisador novoPesquisador) 
 			throws CpfJaCadastradoException{

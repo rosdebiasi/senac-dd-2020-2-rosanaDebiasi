@@ -1,55 +1,48 @@
 package br.sc.senac.model.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.sc.senac.model.vo.Pesquisador;
-import br.sc.senac.model.vo.Pessoa;
-import br.sc.senac.model.vo.PublicoGeral;
 import br.sc.senac.model.vo.Vacina;
-import br.sc.senac.model.vo.Voluntario;
+
 
 public class VacinaDAO {
 	
 	public Vacina cadastrar(Vacina novaVacina) {
 		Connection conexao = Banco.getConnection();
 		
-		String sql = "INSERT INTO VACINA (IDPESQUISADOR, IDPESSOA, PAIS_ORIGEM, ESTAGIO_PESQUISA, DATA_INICIO_PESQUISA)" + 
-						"VALUES(?,?,?,?,?,?)";
+		String sql = "INSERT INTO VACINA (IDPESSOA, PAIS_ORIGEM, ESTAGIO_PESQUISA, DATA_INICIO_PESQUISA, PESQUISADOR)" + 
+						"VALUES(?,?,?,?,?)";
 		
 		PreparedStatement query = Banco.getPreparedStatementWithGeneratedKeys(conexao, sql);
+		Pesquisador pessoa = new Pesquisador();
 		
 		try {
-			
-			Pesquisador pesquisador = verificarIdPesquisador(pesquisador);
-			
-			PublicoGeral publicoGeral = verificarIdPublicoGeral(publicoGeral); // como setar para ser um dos dois? 
-			Voluntario voluntario = verificarIdVoluntario(voluntario); // como setar para ser um dos dois? 
-			
-			query.setInt(1, pesquisador.getId());
-			
-			query.setInt(2, publicoGeral.getId() || voluntario.getId() ); // como setar para ser um dos dois? 
-			
-			query.setString(3, novaVacina.getPaisOrigem());
-			query.setString(4, String.valueOf(novaVacina.getEstagioPesquisa()));
-			query.setString(5, String.valueOf(novaVacina.getDataInicioPesquisa())); 
+			query.setInt(1, pessoa.getId());
+			query.setString(2, novaVacina.getPaisOrigem());
+			query.setString(3, String.valueOf(novaVacina.getEstagioPesquisa()));
+			query.setString(4, String.valueOf(novaVacina.getDataInicioPesquisa())); 
+			query.setString(5, pessoa.getNome());
 		} catch(SQLException e) {
 			System.out.println("Erro ao inserir o pesquisador.\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closeStatement(query);
 			Banco.closeConnection(conexao);
 		}
-		return novoPesquisador;
+		return novaVacina;
 	}
 	
-public boolean alterar(Vacina vacina) {
+	public boolean alterar(Vacina vacina) {
 		
 		String sql = " UPDATE VACINA " 
-					+ " SET PAIS_ORIGEM=?, ESTAGIO_PESQUISA=?, DATA_INICIO_PESQUISA=?, IDPESQUISADOR=? " 
+					+ " SET IDPESSOA=?, PAIS_ORIGEM=?, ESTAGIO_PESQUISA=?, DATA_INICIO_PESQUISA=?, IDPESQUISADOR=? " 
 					+ " WHERE IDVACINA=?";
 
 		boolean alterou = false;
@@ -57,13 +50,14 @@ public boolean alterar(Vacina vacina) {
 		try(Connection conexao = Banco.getConnection();
 			PreparedStatement query = Banco.getPreparedStatement(conexao, sql);){
 			
-			Pesquisador pesquisador = new Pesquisador();
+			Pesquisador pessoa = new Pesquisador();
 			
-			query.setString(1,vacina.getPaisOrigem());
-			query.setString(2, String.valueOf(vacina.getEstagioPesquisa()));
-			query.setString(3, String.valueOf(vacina.getDataInicioPesquisa()));
-			query.setInt(4, vacina.getIdVacina());
-			query.setInt(5, pesquisador.getId());
+			query.setInt(1,pessoa.getId());
+			query.setString(2,vacina.getPaisOrigem());
+			query.setString(3, String.valueOf(vacina.getEstagioPesquisa()));
+			query.setString(4, String.valueOf(vacina.getDataInicioPesquisa()));
+			query.setInt(5, vacina.getIdVacina());
+	
 			int codigoRetorno = query.executeUpdate();
 			alterou = (codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO);
 		} catch (SQLException e) {
@@ -133,37 +127,20 @@ public boolean alterar(Vacina vacina) {
 		return vacinasBuscadas;
 	}
 		
-	private Voluntario verificarIdVoluntario(Voluntario voluntario) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private PublicoGeral verificarIdPublicoGeral(PublicoGeral publicoGeral) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private Pesquisador verificarIdPesquisador(Pesquisador pesquisador) {
-		int idPesquisador = pesquisador.getId();
-		if(idPesquisador !=null) {
-				if(idPesquisador == 0) {
-					PesquisadorDAO pesqDAO= new PesquisadorDAO();
-					idPesquisador = pesqDAO.cadastrar(pesquisador.getId());
-				}	
-		}
-		return idPesquisador;
-	}
-
 	private Vacina construirVacinaDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		Vacina vacinaBuscada = new Vacina();
 		vacinaBuscada.setIdVacina(conjuntoResultante.getInt("idvacina"));
 		vacinaBuscada.setPaisOrigem(conjuntoResultante.getString("origem"));
-		//vacinaBuscada.setEstagioPesquisa(conjuntoResultante.getString("estagio_pesquisa"));  
-		// vacinaBuscada.setDataInicioPesquisa(conjuntoResultante.getString("data_inicio_pesquisa)); // dúvida é para ser em char mas não tem getChar
 		
-		// como preenche o id do publico geral e/ou id do voluntário??? é como está abaixo? e como associar isso com vacina?
-		VoluntarioDAO voluntarioDAO = new VoluntarioDAO();
-		int idVoluntario = conjuntoResultante.getInt("idvoluntario");
+		Date dataSQL = conjuntoResultante.getDate("estagio_pesquisa");
+		LocalDate dataInicioPesquisa = dataSQL.toLocalDate();
+		vacinaBuscada.setDataInicioPesquisa(dataInicioPesquisa);
+		
+		vacinaBuscada.setEstagioPesquisa.valueOf(conjuntoResultante.getString("estagio_pesquisa")));
+		
+		Pesquisador pesquisadorBuscado = new Pesquisador();
+		pesquisadorBuscado.setNome("pesquisador");
+		
 		
 		return  vacinaBuscada;
 	}
