@@ -6,9 +6,9 @@ import java.util.List;
 public class PublicoGeral extends Pessoa{
 
 	public PublicoGeral(int id, String nome, String cpf, LocalDate dataNascimento, char sexo, String telefone,
-			int reacaoVacina, String instituicao, int tipo, List<Vacina> vacinas) {
-		super(id, nome, cpf, dataNascimento, sexo, telefone, reacaoVacina, instituicao, tipo, vacinas);
-
+			String instituicao, int tipo) {
+		super(id, nome, cpf, dataNascimento, sexo, telefone, tipo);
+		// TODO Auto-generated constructor stub
 	}
 
 	public PublicoGeral() {

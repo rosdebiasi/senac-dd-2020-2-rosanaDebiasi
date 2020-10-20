@@ -7,46 +7,48 @@ import java.sql.SQLException;
 
 import br.sc.senac.model.vo.Pesquisador;
 import br.sc.senac.model.vo.Pessoa;
+import br.sc.senac.model.vo.ReacaoVacina;
 import br.sc.senac.model.vo.Vacina;
 
-public class PessoaVacinaDAO {
+public class ReacaoVacinaDAO {
 	
-	public Pessoa cadastrar(Pessoa reacaoVacina) {
+	public ReacaoVacina cadastrar(ReacaoVacina novaReacaoVacina) {
 		Connection conexao = Banco.getConnection();
 		
-		String sql = "INSERT INTO PESSOA_VACINA (REACAO_VACINA)" +
-					"VALUES(?)";
+		String sql = "INSERT INTO REACAO_VACINA (IDPESSOA, IDVACINA, REACAO_VACINA)" +
+					"VALUES(?,?,?)";
 		
 		PreparedStatement query = Banco.getPreparedStatementWithGeneratedKeys(conexao, sql);
 		
 		try {
-			query.setString(1, String.valueOf(reacaoVacina.getReacaoVacina()));
+			query.setInt(1, novaReacaoVacina.getPessoa().getId());
+			query.setInt(2, novaReacaoVacina.getVacina().getIdVacina());
+			query.setInt(3, novaReacaoVacina.getReacaoVacina());
+
 		} catch(SQLException e) {
 			System.out.println("Erro ao inserir a reação da vacina.\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closeStatement(query);
 			Banco.closeConnection(conexao);
 		}
-		return reacaoVacina;
+		return novaReacaoVacina;
 	}
 	
-	public boolean alterar(Pessoa reacaoVacina) {
+	public boolean alterar(ReacaoVacina reacaoVacina) {
 		
-		String sql = " UPDATE PESSOA_VACINA " 
+		String sql = " UPDATE REACAO_VACINA " 
 				+ " SET IDPESSOA=?, IDVACINA=?, REACAO=? "
-				+ " WHERE IDPESSOA=?, IDVACINA=? "; 
+				+ " WHERE IDREACAO_VACINA=?"; 
 		
 		boolean alterou = false;
 		
 		try(Connection conexao = Banco.getConnection();
 			PreparedStatement query = Banco.getPreparedStatement(conexao, sql);){
-				
-			Pesquisador pessoa = new Pesquisador();
-			Vacina vacina = new Vacina();
-				
-			query.setInt(1,pessoa.getId());
-			query.setInt(2,vacina.getIdVacina());
-			query.setInt(3,pessoa.getReacaoVacina());
+
+			query.setInt(1, reacaoVacina.getPessoa().getId());
+			query.setInt(2, reacaoVacina.getVacina().getIdVacina());
+			query.setInt(3, reacaoVacina.getReacaoVacina());
+			query.setInt(4, reacaoVacina.getId());
 	
 			int codigoRetorno = query.executeUpdate();
 			alterou = (codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO);
@@ -60,7 +62,7 @@ public class PessoaVacinaDAO {
 	public boolean excluir(int id) {
 		Connection conexao = Banco.getConnection();
 		
-		String sql = " DELETE FROM PESSOA_VACINA WHERE IDPESSOA=? ";
+		String sql = " DELETE FROM PESSOA_VACINA WHERE IDPESSOA_VACINA=? ";
 
 		PreparedStatement query = Banco.getPreparedStatement(conexao, sql);
 		boolean excluiu = false;
@@ -78,9 +80,9 @@ public class PessoaVacinaDAO {
 		return excluiu;
 	}
 	
-	public Pessoa pesquisarPorId(int id) {
+	public ReacaoVacina pesquisarPorId(int id) {
 		String sql = " SELECT * FROM PESSOA_VACINA ";
-		Pessoa reacaoVacinaBuscada = null;
+		ReacaoVacina reacaoVacinaBuscada = null;
 		
 		try (Connection conexao = Banco.getConnection();
 			PreparedStatement consulta = Banco.getPreparedStatement(conexao, sql);) {
@@ -96,15 +98,13 @@ public class PessoaVacinaDAO {
 		return reacaoVacinaBuscada;
 	}
 
-	private Pessoa construirVacinaDoResultSet(ResultSet conjuntoResultante) throws SQLException {
-		Pesquisador reacaoVacinaBuscada = new Pesquisador();
-		Vacina idVacinaBuscado = new Vacina();
-		
-		reacaoVacinaBuscada.setId(conjuntoResultante.getInt("idpessoa"));
-		idVacinaBuscado.setIdVacina(conjuntoResultante.getInt("idvacina"));
+	private ReacaoVacina construirVacinaDoResultSet(ResultSet conjuntoResultante) throws SQLException {
+		ReacaoVacina reacaoVacinaBuscada = new ReacaoVacina();
+
+		reacaoVacinaBuscada.setId(conjuntoResultante.getInt("idreacaovacina"));
 		reacaoVacinaBuscada.setReacaoVacina(conjuntoResultante.getInt("reacao_vacina"));
-		
-		return conjuntoResultante;
+
+		return reacaoVacinaBuscada;
 	}
 
 

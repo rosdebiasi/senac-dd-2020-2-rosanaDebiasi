@@ -10,17 +10,14 @@ public class Vacina {
 	private char estagioPesquisa;
 	private LocalDate dataInicioPesquisa;
 	
-	private List<Pessoa> pessoas;
 	private Pesquisador pesquisador;
 	
-	public Vacina(int idVacina, String paisOrigem, char estagioPesquisa, LocalDate dataInicioPesquisa,
-			List<Pessoa> pessoas, Pesquisador pesquisador) {
+	public Vacina(int idVacina, String paisOrigem, char estagioPesquisa, LocalDate dataInicioPesquisa, Pesquisador pesquisador) {
 		super();
 		this.idVacina = idVacina;
 		this.paisOrigem = paisOrigem;
 		this.estagioPesquisa = estagioPesquisa;
 		this.dataInicioPesquisa = dataInicioPesquisa;
-		this.pessoas = pessoas;
 		this.pesquisador = pesquisador;
 	}
 
@@ -60,14 +57,6 @@ public class Vacina {
 		this.dataInicioPesquisa = dataInicioPesquisa;
 	}
 
-	public List<Pessoa> getPessoas() {
-		return pessoas;
-	}
-
-	public void setPessoas(List<Pessoa> pessoas) {
-		this.pessoas = pessoas;
-	}
-
 	public Pesquisador getPesquisador() {
 		return pesquisador;
 	}
@@ -82,7 +71,6 @@ public class Vacina {
 				"\nPaís Origem: " + this.getPaisOrigem() +
 				"\nEstágio pesquisa: " + this.getEstagioPesquisa() +
 				"\nData início da pesquisa: " + this.getEstagioPesquisa() +
-				"\nPessoas participantes: " + "\n" + this.getPessoas() +
 				"\nDados do(a) pesquisador(a):" + "\n" + this.getPesquisador();
 	}
 	

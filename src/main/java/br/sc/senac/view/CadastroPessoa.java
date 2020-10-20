@@ -13,6 +13,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
@@ -24,7 +25,8 @@ import javax.swing.JFormattedTextField;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
-import br.sc.senac.controller.PesquisadorController;
+import br.sc.senac.controller.PessoaController;
+import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pesquisador;
 
 public class CadastroPessoa extends JFrame {
@@ -35,6 +37,7 @@ public class CadastroPessoa extends JFrame {
 	private final ButtonGroup GrupoCategoria = new ButtonGroup();
 	private JFormattedTextField formattedTextFieldTelefone;
 	private JFormattedTextField formattedTextFieldCpf;
+	private DatePicker dataNascimento;
 
 
 	/**
@@ -138,6 +141,7 @@ public class CadastroPessoa extends JFrame {
 		lblInstituicao.setBounds(28, 249, 77, 14);
 		contentPane.add(lblInstituicao);
 		
+		ArrayList<Instituicao> intituicoes = obterInstituicoes();
 		JComboBox comboBoxIntituicao = new JComboBox();
 		comboBoxIntituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		comboBoxIntituicao.setEnabled(false);
@@ -165,7 +169,7 @@ public class CadastroPessoa extends JFrame {
 				
 			DatePickerSettings dateSettings = new DatePickerSettings();
 			dateSettings.setAllowKeyboardEditing(false);
-			final DatePicker dataNascimento = new DatePicker(dateSettings);
+			dataNascimento = new DatePicker(dateSettings);
 			dataNascimento.setBounds(154, 96, 251, 20);
 			contentPane.add(dataNascimento);
 	
@@ -182,12 +186,13 @@ public class CadastroPessoa extends JFrame {
 				Pesquisador novoPesquisador = new Pesquisador();
 				novoPesquisador.setNome(txtNome.getText());
 				novoPesquisador.setCpf(formattedTextFieldCpf.getText());
-				novoPesquisador.setDataNascimento(); // dúvida pegar a data de nascimento
+				novoPesquisador.setDataNascimento(dataNascimento.getDate()); 
+
 				novoPesquisador.setSexo(lblSexo.getText()); // dúvida pegar sexo
 				novoPesquisador.setInstituicao(comboBoxIntituicao.setEnabled(true).getText()); // dúvida pegar instituicao
 							
 				//Instanciar um controller adequado
-				PesquisadorController pesquisadorController = new PesquisadorController(); 
+				PessoaController pesquisadorController = new PessoaController(); 
 				
 				//Chamar o método SALVAR no controller e pegar a mensagem retornada
 				String mensagem = pesquisadorController.salvar(novoPesquisador);

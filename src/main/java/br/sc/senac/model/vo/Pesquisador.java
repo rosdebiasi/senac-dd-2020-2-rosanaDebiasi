@@ -5,29 +5,29 @@ import java.util.List;
 
 public class Pesquisador extends Pessoa{
 	
-	private String instituicao;
-
-	public Pesquisador(int id, String nome, String cpf, LocalDate dataNascimento, char sexo, String telefone,
-			int reacaoVacina, String instituicao, int tipo, List<Vacina> vacinas) {
-		super(id, nome, cpf, dataNascimento, sexo, telefone, reacaoVacina, instituicao, tipo, vacinas);
-
+	private Instituicao instituicao;
+	
+	public Pesquisador(int id, String nome, String cpf, LocalDate dataNascimento, char sexo, String telefone, int tipo,
+			Instituicao instituicao) {
+		super(id, nome, cpf, dataNascimento, sexo, telefone, tipo);
+		this.instituicao = instituicao;
 	}
 
 	public Pesquisador() {
 		super();
 	}
-
-	public String getInstituicao() {
+	
+	public Instituicao getInstituicao() {
 		return instituicao;
 	}
 
-	public void setInstituicao(String instituicao) {
+	public void setInstituicao(Instituicao instituicao) {
 		this.instituicao = instituicao;
 	}
 
 	@Override
 	public String toString() {
-		return  "\nNome do pesquisador: " + this.getNome() +
-				"\nInstituição: " + this.getInstituicao();
+		return  "\nNome do pesquisador: " + this.getNome()+
+				"\nInstituição: " + instituicao.getNome();
 	}
 }

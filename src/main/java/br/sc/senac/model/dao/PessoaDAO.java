@@ -9,27 +9,28 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pesquisador;
 import br.sc.senac.model.vo.Pessoa;
 
 public class PessoaDAO {
 	
-	public Pessoa cadastrar(Pessoa novaPessoa) {
+	public Pesquisador cadastrar(Pesquisador novaPessoa) {
 		Connection conexao = Banco.getConnection();
 		
-		String sql = "INSERT INTO PESSOA (TIPO, INSTITUICAO, NOME, CPF, DATA_NASCIMENTO, SEXO, TELEFONE)" + 
+		String sql = "INSERT INTO PESSOA (TIPO, NOME, CPF, DATA_NASCIMENTO, SEXO, TELEFONE, IDINSTITUICAO)" + 
 						"VALUES(?,?,?,?,?,?)";
 		
 		PreparedStatement query = Banco.getPreparedStatementWithGeneratedKeys(conexao, sql);
 		
 		try {
 			query.setInt(1, novaPessoa.getTipo());
-			query.setString(2, novaPessoa.getInstituicao());
-			query.setString(3, novaPessoa.getNome());
-			query.setString(4, novaPessoa.getCpf());
-			query.setString(5, String.valueOf(novaPessoa.getDataNascimento())); 
-			query.setString(6, String.valueOf(novaPessoa.getSexo())); 
-			query.setString(7, novaPessoa.getTelefone());
+			query.setString(2, novaPessoa.getNome());
+			query.setString(3, novaPessoa.getCpf());
+			query.setString(4, String.valueOf(novaPessoa.getDataNascimento())); 
+			query.setString(5, String.valueOf(novaPessoa.getSexo())); 
+			query.setString(6, novaPessoa.getTelefone());
+			query.setInt(6, novaPessoa.getInstituicao().getId());
 			
 		} catch(SQLException e) {
 			System.out.println("Erro ao inserir o usuário.\nCausa: " + e.getMessage());
@@ -40,11 +41,11 @@ public class PessoaDAO {
 		return novaPessoa;
 	}
 	
-public boolean alterar(Pessoa pessoa) {
+public boolean alterar(Pesquisador pessoa) {
 		
 		String sql = " UPDATE PESSOA " 
-					+ " SET TIPO=?, SET INSTITUICAO=?, SET NOME=?, CPF=?, "
-					+ " DATA_NASCIMENTO=?, SEXO=?, TELEFONE=? "
+					+ " SET TIPO=?, SET NOME=?, CPF=?, "
+					+ " DATA_NASCIMENTO=?, SEXO=?, TELEFONE=?"
 					+ " WHERE IDPESSOA=? "; 
 
 		boolean alterou = false;
@@ -53,18 +54,17 @@ public boolean alterar(Pessoa pessoa) {
 			PreparedStatement query = Banco.getPreparedStatement(conexao, sql);){
 			
 			query.setInt(1, pessoa.getTipo());
-			query.setString(2, pessoa.getInstituicao());
-			query.setString(3, pessoa.getNome());
-			query.setString(4, pessoa.getCpf());
-			query.setString(5, String.valueOf(pessoa.getDataNascimento())); 
-			query.setString(6, String.valueOf(pessoa.getSexo())); 
-			query.setString(7, pessoa.getTelefone());
-			query.setInt(1, pessoa.getId());
+			query.setString(2, pessoa.getNome());
+			query.setString(3, pessoa.getCpf());
+			query.setString(4, String.valueOf(pessoa.getDataNascimento())); 
+			query.setString(5, String.valueOf(pessoa.getSexo())); 
+			query.setString(6, pessoa.getTelefone());
+			query.setInt(7, pessoa.getId());
 			
 			int codigoRetorno = query.executeUpdate();
 			alterou = (codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO);
 		} catch (SQLException e) {
-			System.out.println("Erro ao alterar o público geral.\nCausa: " + e.getMessage());
+			System.out.println("Erro ao alterar a pessoa.\nCausa: " + e.getMessage());
 		}
 		return alterou;
 	}
@@ -91,7 +91,7 @@ public boolean alterar(Pessoa pessoa) {
 	}
 	
 	public Pessoa pesquisarPorId(int id) {
-		String sql = " SELECT * FROM PESSOA WHERE IDPESSOA=? ";
+		String sql = " SELECT FROM PESSOA WHERE IDPESSOA=? ";
 		Pessoa pessoaBuscada = null;
 		
 		try (Connection conexao = Banco.getConnection();
@@ -128,8 +128,8 @@ public boolean alterar(Pessoa pessoa) {
 	
 	public List<Pesquisador> pesquisarTodos() {
 		Connection conexao = Banco.getConnection();
-		String sql = " SELECT IDPESQUISADOR, NOME, CPF, DATA_NASCIMENTO, SEXO, REACAO_VACINA, TELEFONE, INSTITUICAO " +
-					" FROM PESSOA, PESQUISADOR " +
+		String sql = " SELECT IDPESQUISADOR, NOME, CPF, DATA_NASCIMENTO, SEXO, REACAO_VACINA, TELEFONE " +
+					" FROM PESSOA " +
 					" WHERE IDPESSOA=? ";
 		
 		PreparedStatement consulta = Banco.getPreparedStatement(conexao, sql);
@@ -182,19 +182,18 @@ public boolean alterar(Pessoa pessoa) {
 
 	private Pesquisador construirPessoaDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		Pesquisador pessoaBuscada = new Pesquisador();
+		
 		pessoaBuscada.setId(conjuntoResultante.getInt("id"));
 		pessoaBuscada.setTipo(conjuntoResultante.getInt("tipo"));
-		pessoaBuscada.setInstituicao(conjuntoResultante.getString("instituicao"));
 		pessoaBuscada.setNome(conjuntoResultante.getString("nome"));
 		pessoaBuscada.setCpf(conjuntoResultante.getString("cpf"));
 		pessoaBuscada.setTelefone(conjuntoResultante.getString("telefone"));
-		
+	
 		Date dataSQL = conjuntoResultante.getDate("data_nascimento");
 		LocalDate dataNascimento = dataSQL.toLocalDate();
 		pessoaBuscada.setDataNascimento(dataNascimento);
 			
-		pessoaBuscada.setSexo(conjuntoResultante.getCharacterStream("sexo")); // dúvida é para ser em char mas não tem getChar
-
+		pessoaBuscada.setSexo(conjuntoResultante.getString("sexo").charAt(0)); 
 		return  pessoaBuscada;
 	}
 	

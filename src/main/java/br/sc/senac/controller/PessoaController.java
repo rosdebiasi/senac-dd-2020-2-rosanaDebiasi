@@ -1,57 +1,57 @@
 package br.sc.senac.controller;
 
-
-import br.sc.senac.model.bo.PublicoGeralBO;
+import br.sc.senac.model.bo.PessoaBO;
 import br.sc.senac.model.exception.CpfInvalidoException;
 import br.sc.senac.model.exception.CpfJaCadastradoException;
 import br.sc.senac.model.exception.NomeInvalidoException;
-import br.sc.senac.model.vo.PublicoGeral;
+import br.sc.senac.model.vo.Pessoa;
 
-public class PublicoGeralController {
+public class PessoaController {
 	
-	private PublicoGeralBO publicoGeralBO = new PublicoGeralBO();
+	private PessoaBO pessoaBO = new PessoaBO();
 	
-	public String salvar(PublicoGeral novoPublicoGeral) {
+	public String salvar(Pessoa novaPessoa) {
 		String mensagem = "";
 		
 		try {
-			this.validarCPF(novoPublicoGeral.getCpf());
-			this.validarNome(novoPublicoGeral.getNome());
-			novoPublicoGeral = publicoGeralBO.salvar(novoPublicoGeral);
+			this.validarCPF(novaPessoa.getCpf());
+			this.validarNome(novaPessoa.getNome());
+			novaPessoa = pessoaBO.salvar(novaPessoa);
+			
 		} catch (CpfInvalidoException
 				| NomeInvalidoException
 				| CpfJaCadastradoException excecao) {
 			mensagem = excecao.getMessage();
 		} 
-		mensagem = "Público geral salvo com sucesso! Id gerado: " + novoPublicoGeral.getId();
+		
+		mensagem = "Usuário salvo com sucesso! Id gerado: " + novaPessoa.getId();
 		
 		return mensagem;
 	}
 	
-	public String atualizar(PublicoGeral publicoGeral) {
+	public String atualizar(Pessoa pessoa) {
 		String mensagem = "";
 		boolean atualizou = false;
 		
 		try {
-			this.validarCPF(publicoGeral.getCpf());
-			this.validarNome(publicoGeral.getNome());
-			atualizou = publicoGeralBO.atualizar(publicoGeral);
-		} catch (CpfInvalidoException
+			this.validarCPF(pessoa.getCpf());
+			this.validarNome(pessoa.getNome());
+			atualizou = pessoaBO.atualizar(pessoa);
+		} catch (CpfInvalidoException 
 				| NomeInvalidoException
 				| CpfJaCadastradoException excecao) {
 			mensagem = excecao.getMessage();
 		} 
 		
 		if(atualizou) {
-			mensagem = "Público geral atualizado com sucesso!";
+			mensagem = "Pesquisador atualizado com sucesso!";
 		} else {
-			mensagem = "Erro ao atualizar público geral: (";
+			mensagem = "Erro ao atualizar pesquisador: (";
 		}
 		return mensagem;
 	}
 	
 	private void validarCPF(String cpf) throws CpfInvalidoException{
-		
 		if(cpf == null || cpf.isEmpty()
 				|| cpf.length() != 11) {
 			throw new CpfInvalidoException("CPF deve possuir tamanho 11");
@@ -69,7 +69,7 @@ public class PublicoGeralController {
 		if(nome == null || nome.isEmpty()
 				|| nome.length() >= 3) {
 			throw new NomeInvalidoException("Nome deve ter no mínimo 3 caracteres.");
-		}	
+		}
 	}
 
 }

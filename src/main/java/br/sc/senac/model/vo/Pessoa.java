@@ -11,14 +11,11 @@ public abstract class Pessoa {
 	private LocalDate dataNascimento;
 	private char sexo;
 	private String telefone;
-	private int reacaoVacina;
-	private String instituicao;
 	private int tipo;
 	
-	private List <Vacina> vacinas;
 
 	public Pessoa(int id, String nome, String cpf, LocalDate dataNascimento, char sexo, String telefone,
-			int reacaoVacina, String instituicao, int tipo, List<Vacina> vacinas) {
+			int tipo) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -26,10 +23,7 @@ public abstract class Pessoa {
 		this.dataNascimento = dataNascimento;
 		this.sexo = sexo;
 		this.telefone = telefone;
-		this.reacaoVacina = reacaoVacina;
-		this.instituicao = instituicao;
 		this.tipo = tipo;
-		this.vacinas = vacinas;
 	}
 
 	public Pessoa() {
@@ -84,31 +78,6 @@ public abstract class Pessoa {
 		this.telefone = telefone;
 	}
 
-	public List<Vacina> getVacinas() {
-		return vacinas;
-	}
-
-	public void setVacinas(List<Vacina> vacinas) {
-		this.vacinas = vacinas;
-	}
-	
-	
-	public int getReacaoVacina() {
-		return reacaoVacina;
-	}
-
-	public void setReacaoVacina(int reacaoVacina) {
-		this.reacaoVacina = reacaoVacina;
-	}
-	
-	public String getInstituicao() {
-		return instituicao;
-	}
-
-	public void setInstituicao(String instituicao) {
-		this.instituicao = instituicao;
-	}
-
 	public int getTipo() {
 		return tipo;
 	}
@@ -121,12 +90,11 @@ public abstract class Pessoa {
 	public String toString() {
 		return "\nNome: " + this.getNome() +
 				"\nid : " + this.getId() +
+				"\nTipo: " + this.getTipo() +
 				"\nCPF: " + this.getCpf() +
 				"\nData de Nascimento: " + this.getDataNascimento() +
 				"\nSexo: " + this.getSexo() +
-				"\nTelefone: " + this.getTelefone() +
-				"\nVacinas tomadas: " + "\n" + this.getVacinas() +
-				"\nReação Vacina: " + this.getReacaoVacina();
+				"\nTelefone: " + this.getTelefone();
 	}
 	
 }

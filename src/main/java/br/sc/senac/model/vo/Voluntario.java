@@ -6,11 +6,11 @@ import java.util.List;
 public class Voluntario extends Pessoa {
 
 	public Voluntario(int id, String nome, String cpf, LocalDate dataNascimento, char sexo, String telefone,
-			int reacaoVacina, List<Vacina> vacinas) {
-		super(id, nome, cpf, dataNascimento, sexo, telefone, reacaoVacina, telefone, reacaoVacina, vacinas);
-
+			 int tipo) {
+		super(id, nome, cpf, dataNascimento, sexo, telefone, tipo);
+		
 	}
-	
+
 	public Voluntario() {
 		super();
 	}

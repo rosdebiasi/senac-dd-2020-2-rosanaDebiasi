@@ -135,13 +135,7 @@ public class VacinaDAO {
 		Date dataSQL = conjuntoResultante.getDate("estagio_pesquisa");
 		LocalDate dataInicioPesquisa = dataSQL.toLocalDate();
 		vacinaBuscada.setDataInicioPesquisa(dataInicioPesquisa);
-		
-		vacinaBuscada.setEstagioPesquisa.valueOf(conjuntoResultante.getString("estagio_pesquisa")));
-		
-		Pesquisador pesquisadorBuscado = new Pesquisador();
-		pesquisadorBuscado.setNome("pesquisador");
-		
-		
+			
 		return  vacinaBuscada;
 	}
 	
